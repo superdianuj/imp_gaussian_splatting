@@ -30,7 +30,7 @@ chmod +x run_strategy_3.sh
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center;">
   <figure style="margin: 10px;">
     <img src="some_results/original_gs.gif" alt="GIF 1" style="width: 200px; height: auto;">
-    <figcaption>Original Gaussian Splatting</figcaption>
+    <figcaption><br>Original Gaussian Splatting</figcaption>
   </figure>
   <figure style="margin: 10px;">
     <img src="some_results/strategy-1.gif" alt="GIF 2" style="width: 200px; height: auto;">
