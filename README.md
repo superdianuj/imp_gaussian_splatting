@@ -51,12 +51,13 @@ chmod +x run_strategy_3.sh
     </div>
     <figcaption style="margin-top: 10px;">BAD-Gaussians</figcaption>
   </figure>
-  <figure style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-    <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 950px;">
-      <img src="some_results/deblur-nerf.gif" alt="GIF 5" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+  <figure style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between; grid-column: span 2;">
+    <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 400px;">
+      <img src="some_results/deblur-nerf.gif" alt="GIF 5" style="max-width: 100%; max-height: 100%; object-fit: contain; min-width: 300px;">
     </div>
     <figcaption style="margin-top: 10px;">Deblur-NeRF</figcaption>
   </figure>
+</div>
 </div>
 
 
