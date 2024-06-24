@@ -31,31 +31,31 @@ chmod +x run_strategy_3.sh
     <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 250px;">
       <img src="some_results/original_gs.gif" alt="GIF 1" style="max-width: 100%; max-height: 100%; object-fit: contain;">
     </div>
-    <figcaption style="margin-top: 10px;">Original Gaussian Splatting</figcaption>
+    <figcaption style="margin-top: 10px;">**Original Gaussian Splatting**</figcaption>
   </figure>
   <figure style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
     <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 250px;">
       <img src="some_results/strategy-1.gif" alt="GIF 2" style="max-width: 100%; max-height: 100%; object-fit: contain;">
     </div>
-    <figcaption style="margin-top: 10px;">Preprocessed-Gaussian Splatting (Strategy-1)</figcaption>
+    <figcaption style="margin-top: 10px;">**Preprocessed-Gaussian Splatting (Strategy-1)**</figcaption>
   </figure>
   <figure style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
     <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 250px;">
       <img src="some_results/strategy-3.gif" alt="GIF 3" style="max-width: 100%; max-height: 100%; object-fit: contain;">
     </div>
-    <figcaption style="margin-top: 10px;">Preprocessed-Gaussian Splatting (Strategy-3)</figcaption>
+    <figcaption style="margin-top: 10px;">**Preprocessed-Gaussian Splatting** (Strategy-3)</figcaption>
   </figure>
   <figure style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
     <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 250px;">
       <img src="some_results/bad_gaussian.gif" alt="GIF 4" style="max-width: 100%; max-height: 100%; object-fit: contain;">
     </div>
-    <figcaption style="margin-top: 10px;">BAD-Gaussians</figcaption>
+    <figcaption style="margin-top: 10px;">**BAD-Gaussians**</figcaption>
   </figure>
   <figure style="margin: 0; text-align: center; display: flex; flex-direction: column; justify-content: space-between; grid-column: span 2;">
     <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; min-height: 1400px;">
       <img src="some_results/deblur-nerf.gif" alt="GIF 5" style="max-width: 100%; max-height: 100%; object-fit: contain; min-width: 1300px;">
     </div>
-    <figcaption style="margin-top: 10px;">Deblur-NeRF</figcaption>
+    <figcaption style="margin-top: 10px;">**Deblur-NeRF**</figcaption>
   </figure>
 </div>
 </div>
