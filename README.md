@@ -3,7 +3,7 @@
 
 ## Installation
 
-** Platform **: Ubuntu 22+
+**Platform**: Ubuntu 22+
 
 ## Running Commands
 ```bash
