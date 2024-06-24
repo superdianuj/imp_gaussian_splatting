@@ -47,6 +47,10 @@ chmod +x run_strategy_3.sh
     <img src="some_results/deblur-nerf.gif" alt="GIF 5" style="width: 100%; height: auto;">
     <figcaption style="margin-top: 10px;">Deblur-NeRF</figcaption>
   </figure>
+    <figure style="margin: 0; text-align: center;">
+    <img src="" alt="GIF 5" style="width: 100%; height: auto;">
+    <figcaption style="margin-top: 10px;"></figcaption>
+  </figure>
 </div>
 
 
