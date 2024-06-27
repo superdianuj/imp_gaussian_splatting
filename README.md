@@ -31,7 +31,7 @@ I use [Nerfstudio](https://docs.nerf.studio/quickstart/installation.html) for re
 cd rendering_and_metrics
 python gs_schedule.py --dir <folder containing images to render (which can be blurr)> --gt_dir <ground truths for those images, especially if they are blurr>
 ```
-
+The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.txt) file.
 ## Some Results
 
 | Original Gaussian Splatting | Preprocessed-Gaussian Splatting (Strategy-1) | Preprocessed-Gaussian Splatting (Strategy-3) |
