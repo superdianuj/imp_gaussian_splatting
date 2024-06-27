@@ -24,6 +24,13 @@ chmod +x run_strategy_3.sh
 ./run_strategy_3 <path to images folder>
 ```
 
+### Rendering and Metrics
+I use [Nerfstudio](https://docs.nerf.studio/quickstart/installation.html) for rendering the gaussian splats, as well as evaluating metrics. For rendering and evaluation, run:
+
+```bash
+cd rendering_and_metrics
+python gs_schedule.py --dir <folder containing images to render (which can be blurr)> --gt_dir <ground truths for those images, especially if they are blurr>
+```
 
 ## Some Results
 
