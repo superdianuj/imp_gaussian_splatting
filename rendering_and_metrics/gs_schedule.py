@@ -44,21 +44,27 @@ for i in range(len(gt_img_names)):
     img_gt=gt_imgs[i]
     errors=np.array([np.mean((img_gt-img_org)**2) for img_org in org_imgs])
     min_indx=np.argmin(errors)
-    mapping_img_names[int(org_img_names[min_indx].split('_')[-1].split('.')[0])]=int(gt_img_names[i].split('_')[-1].split('.')[0])-1
+    # mapping_img_names[int(org_img_names[min_indx].split('_')[-1].split('.')[0])]=int(gt_img_names[i].split('_')[-1].split('.')[0])-1
+    mapping_img_names[int(gt_img_names[i].split('_')[-1].split('.')[0])-1]=int(org_img_names[min_indx].split('_')[-1].split('.')[0])
 
 # now I need to create new_pseudo_gt_img_names from pseudo_get_img_names
 
 pseudo_gt_img_names=sorted(os.listdir(args.gt_dir),key=lambda x:int(x.split('_')[-1].split('.')[0]) if '_' in x else int(x.split('.')[0]))
 new_pseudo_names=[]
-for name in pseudo_gt_img_names:
-    print(name)
-    print("--------")
-    indx=int(name.split('_')[-1].split('.')[0])
-    new_indx=mapping_img_names[indx]
+# for name in pseudo_gt_img_names:
+#     print(name)
+#     print("--------")
+#     indx=int(name.split('_')[-1].split('.')[0])
+#     new_indx=mapping_img_names[indx]
+#     new_name=name.split('_')[0]+'_'+str(new_indx)+'.'+name.split('_')[-1].split('.')[-1]
+#     new_pseudo_names.append(new_name)
+
+for i in range(len(pseudo_gt_img_names):
+    name=pseudo_gt_img_names[i]
+    new_idx=mapping_img_names[i]
     new_name=name.split('_')[0]+'_'+str(new_indx)+'.'+name.split('_')[-1].split('.')[-1]
     new_pseudo_names.append(new_name)
-
-new_pseudo_names=sorted(new_pseudo_names,key=lambda x:int(x.split('_')[-1].split('.')[0]))
+    
 pseudo_gt_img_paths=[os.path.join(args.gt_dir,gt_name) for gt_name in new_pseudo_names]
 
 
@@ -152,7 +158,6 @@ def get_metrics(renders_dir, gt_dir):
     ssim_r=[]
     psnr_r=[]
     lpips_r=[]
-
 
     for fname in os.listdir(renders_dir):
         render_path=os.path.join(renders_dir,fname)
