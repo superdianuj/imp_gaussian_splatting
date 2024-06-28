@@ -68,7 +68,7 @@ print(len(pseudo_gt_img_paths))
 
 
 
-os.system("ns-train splatfacto --data dataset  --viewer.quit-on-train-completion True nerfstudio-data --train-split-fraction 1.1 --eval_mode 'all'")
+os.system("ns-train splatfacto --data dataset  --viewer.quit-on-train-completion True --pipeline.model.cull_alpha_thresh 0.005 --pipeline.model.continue_cull_post_densification False nerfstudio-data --train-split-fraction 1.1 --eval_mode 'all'")
 
 output_pth=os.listdir('outputs/dataset/splatfacto')[0]
 config_pth=os.path.join(os.path.join('outputs/dataset/splatfacto',output_pth),'config.yml')
