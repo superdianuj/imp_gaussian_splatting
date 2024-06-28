@@ -2,8 +2,9 @@ import os
 import cv2
 
 dirr='results/SPSR/set5'
-
-file_names = sorted(os.listdir(dirr),key=lambda x: int(x.split('_')[-1].split('.')[0]))
+primary_dir=os.listdir(dirr)
+primary_dir=[name for name in primary_dir if name.endswith('.png') or name.endswith('.jpg') or name.endswith('.JPG')]
+file_names = sorted(primary_dir,key=lambda x: int(x.split('_')[-1].split('.')[0]))
 
 # Full paths of the files
 images_path = [os.path.join(dirr, file_name) for file_name in file_names if file_name.endswith('.JPG') or file_name.endswith('.png') or file_name.endswith('.jpg')]
