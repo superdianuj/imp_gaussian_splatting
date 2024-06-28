@@ -13,7 +13,7 @@ parser.add_argument('--vert_blur',type=int,default=5,help='X-axis blur parameter
 args=parser.parse_args()
 
 dirr=args.dir
-img_names=sorted(os.listdir(dirr),key=lambda x: int(x.split('.')[0]))
+img_names=sorted(os.listdir(dirr),key=lambda x: int(x.split('_')[-1].split('.')[0]) if '_' in x else int(x.split('.')[0]))
 img_dirs=[os.path.join(dirr,img_name) for img_name in img_names]
 
 if os.path.exists(dirr+'_blurred'):
