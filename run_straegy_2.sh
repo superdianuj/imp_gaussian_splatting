@@ -23,7 +23,7 @@ mkdir data/input
 mkdir data/output
 cp -r NAFNet/deblur_output/* data/input
 echo ">> Performing Super-Resolution via Real-ESRGAN..."
-./realesrgan-ncnn-vulkan -i input_folder -o sr_output -n realesrgan-x4plus -s 4
+./realesrgan-ncnn-vulkan -i data/input -o data/output -n realesrgan-x4plus -s 4
 cd ..
 
 if [ -d SPSR/img_dataset ]; then
