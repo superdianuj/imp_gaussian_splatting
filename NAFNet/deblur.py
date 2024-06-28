@@ -28,7 +28,7 @@ paths=sorted(os.listdir('resized'),key=lambda x: int(x.split('_')[-1].split('.')
 
 for pth in paths:
     curr_path=os.path.join('resized',pth)
-    os.system(f'python basicsr/demo.py -opt options/test/GoPro/NAFNet-width64.yml --input_path {curr_path} --output_path deblur_output/{pth}')
+    os.system(f'python basicsr/demo.py -opt options/test/REDS/NAFNet-width64.yml --input_path {curr_path} --output_path deblur_output/{pth}')
 
 
 os.system(f'rm -rf {dirr}')
