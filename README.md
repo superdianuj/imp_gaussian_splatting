@@ -64,6 +64,15 @@ python gs_schedule.py --dir <folder containing images to render (which can be bl
 The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.txt) file.
 ## Some Results
 
+### Comparison with Blurry and Ground Truth
+| Ground Truth | Blurry | NAFNet->SPSR |
+|:---:|:---:|:---:|
+| ![Ground Truth](some_results/ref/groundtruth_rendering.gif) | ![Blurry](some_results/ref/blur_rendering.gif) | ![NAFNet->SPSR (Strategy-1)](some_results/ref/nafnet_spsr_rendering.gif) |
+
+
+
+### Comparison with Other Deblurring Rendering Techniques
+
 | Original Gaussian Splatting | Preprocessed-Gaussian Splatting (Strategy-1) | Preprocessed-Gaussian Splatting (Strategy-3) |
 |:--:|:--:|:--:|
 | ![GIF 1](some_results/original_gs.gif) | ![GIF 2](some_results/strategy-1.gif) | ![GIF 3](some_results/strategy-3.gif) |
@@ -75,6 +84,3 @@ The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.tx
 
 
 
-| Ground Truth | Blurry | NAFNet->SPSR |
-|:---:|:---:|:---:|
-| ![Ground Truth](some_results/ref/groundtruth_rendering.gif) | ![Blurry](some_results/ref/blur_rendering.gif) | ![NAFNet->SPSR (Strategy-1)](some_results/ref/nafnet_spsr_rendering.gif) |
