@@ -24,7 +24,7 @@ for img_path in img_paths:
     cv2.imwrite(f'resized/img_{count}.png',img_resized)
     count+=1
 
-paths=sorted(os.listdir(dirr),key=lambda x: int(x.split('.')[0]))
+paths=sorted(os.listdir('resized'),key=lambda x: int(x.split('_')[-1].split('.')[0]) if '_' in x else int(x.split('.')[0]))
 
 for pth in paths:
     curr_path=os.path.join('resized',pth)
