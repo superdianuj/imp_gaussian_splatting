@@ -7,11 +7,11 @@ import os
 from PIL import Image
 import torch
 import torchvision.transforms.functional as tf
-from loss_utils import ssim
-from lpipsPyTorch import lpips
 import json
 from tqdm import tqdm
-from image_utils import psnr
+from skimage.metrics import structural_similarity as ssim
+import lpips
+from torchvision import transforms
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--dir',type=str,required=True,help='directory of images to render upon')
@@ -61,12 +61,6 @@ for name in pseudo_gt_img_names:
 new_pseudo_names=sorted(new_pseudo_names,key=lambda x:int(x.split('_')[-1].split('.')[0]))
 pseudo_gt_img_paths=[os.path.join(args.gt_dir,gt_name) for gt_name in new_pseudo_names]
 
-print(new_pseudo_names)
-
-print(len(pseudo_gt_img_paths))
-# sdjf
-
-
 
 os.system("ns-train splatfacto --data dataset  --viewer.quit-on-train-completion True --pipeline.model.cull_alpha_thresh 0.005 --pipeline.model.continue_cull_post_densification False nerfstudio-data --train-split-fraction 1.1 --eval_mode 'all'")
 
@@ -93,8 +87,6 @@ while(cap.isOpened()):
         cv2.imwrite(f'{gs_dir}/groundtruth_imgs/img_{count}.png',gt_im)
     else:
         tmp_pth=pseudo_gt_img_paths[count]
-        print("++++++++++++")
-        print(tmp_pth)
         gt_im=cv2.imread(tmp_pth)
         cv2.imwrite(f'{gs_dir}/groundtruth_imgs/img_{count}.png',gt_im)
     
@@ -113,49 +105,76 @@ while(cap.isOpened()):
   else:
     break
 
-# When everything done, release the video capture object
 cap.release()
 
-# Closes all the frames
 cv2.destroyAllWindows()
 
 os.system('rm -rf buffer.mp4')
 
+def calculate_psnr(img_path, ground_truth_path):
+    img = cv2.imread(img_path)
+    ground_truth = cv2.imread(ground_truth_path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    ground_truth = cv2.cvtColor(ground_truth, cv2.COLOR_BGR2GRAY)
+    mse = np.mean((img - ground_truth) ** 2)
+    max_pixel = 255.0
+    psnr = 20 * np.log10(max_pixel / np.sqrt(mse)+1e-10)
+    return psnr
 
 
-def readImages(renders_dir, gt_dir):
-    renders = []
-    gts = []
-    image_names = []
+def calculate_ssim(img_path, ground_truth_path):
+    img = cv2.imread(img_path)
+    ground_truth = cv2.imread(ground_truth_path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    ground_truth = cv2.cvtColor(ground_truth, cv2.COLOR_BGR2GRAY)
+    ssim_value = ssim(img, ground_truth, data_range=ground_truth.max() - ground_truth.min())
+    return ssim_value
+
+
+def calculate_lpips(img_path, ground_truth_path):
+    img = Image.open(img_path).convert('RGB')
+    ground_truth = Image.open(ground_truth_path).convert('RGB')
+    # Convert images to tensors
+    preprocess = transforms.Compose([
+        transforms.Resize((256, 256)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+    ])
+    
+    img = preprocess(img).unsqueeze(0)
+    ground_truth = preprocess(ground_truth).unsqueeze(0)
+    loss_fn = lpips.LPIPS(net='vgg')
+    lpips_value = loss_fn(img, ground_truth)
+    return lpips_value.item()
+
+
+def get_metrics(renders_dir, gt_dir):
+    ssim_r=[]
+    psnr_r=[]
+    lpips_r=[]
+
+
     for fname in os.listdir(renders_dir):
-        render = Image.open(os.path.join(renders_dir,fname))
-        gt = Image.open(os.path.join(gt_dir,fname))
-        renders.append(tf.to_tensor(render).unsqueeze(0)[:, :3, :, :].cuda())
-        gts.append(tf.to_tensor(gt).unsqueeze(0)[:, :3, :, :].cuda())
-        image_names.append(fname)
-    return renders, gts, image_names
+        render_path=os.path.join(renders_dir,fname)
+        gt_path = os.path.join(gt_dir,fname)
+        ssim_r.append(calculate_ssim(render_path, gt_path))
+        psnr_r.append(calculate_psnr(render_path, gt_path))
+        lpips_r.append(calculate_lpips(render_path, gt_path))
+
+    return ssim_r, psnr_r, lpips_r
 
 def evaluate(base_dir):
 
     renders_dir=base_dir+'/rendered_imgs'
     gt_dir=base_dir+'/groundtruth_imgs'
 
-    renders, gts, image_names = readImages(renders_dir, gt_dir)
-
-    ssims = []
-    psnrs = []
-    lpipss = []
-
-    for idx in tqdm(range(len(renders)), desc="Metric evaluation progress"):
-        ssims.append(ssim(renders[idx], gts[idx]))
-        psnrs.append(psnr(renders[idx], gts[idx]))
-        lpipss.append(lpips(renders[idx], gts[idx], net_type='vgg'))
+    ssims, psnrs, lpipss = get_metrics(renders_dir, gt_dir)
     print("```============================================='''")
     print("  SSIM : {:>12.7f}".format(torch.tensor(ssims).mean(), ".5"))
     print("  PSNR : {:>12.7f}".format(torch.tensor(psnrs).mean(), ".5"))
     print("  LPIPS: {:>12.7f}".format(torch.tensor(lpipss).mean(), ".5"))
-    print("")
     print("```============================================='''\n")
+    print("")
     text_file = open(f'{base_dir}/metrics.txt', "w")
     text_file.write("  SSIM : {:>12.7f}".format(torch.tensor(ssims).mean(), ".5"))
     text_file.write("  PSNR : {:>12.7f}".format(torch.tensor(psnrs).mean(), ".5"))

@@ -5,6 +5,36 @@
 
 **Platform**: Ubuntu 22+
 
+### Setting up Real-ESRGAN
+```bash
+cd Real-ESRGAN
+pip install basicsr
+pip install -r requirements.txt
+python setup.py develop
+
+wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-general-x4v3.pth
+```
+#### Basic Inference
+For inference, the basic commands are:
+```bash
+python inference_realesrgan.py -n realesr-general-x4v3 -i <folder of images>
+rm -rf esrgan_output
+mv results esrgan_output
+```
+
+### Setting up NAFNet
+```bash
+cd NAFNet
+gdown https://drive.google.com/file/d/14D4V4raNYIOhETfcuuLI3bGLB-OYIv6X/view?usp=sharing
+mv NAFNet-REDS-width64.pth experiments/pretrained_models
+pip install -r requirements.txt
+python setup.py develop --no_cuda_ext
+```
+#### Basic Inference
+```bash
+python deblur.py --dir <folder of images>
+```
+
 
 ## Running Commands
 ```bash
