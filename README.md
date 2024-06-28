@@ -75,4 +75,6 @@ The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.tx
 
 
 
-
+| Ground Truth | Blurry | NAFNet->SPSR |
+|:---:|:---:|:---:|
+| ![Ground Truth](some_results/ref/groundtruth_rendering.gif) | ![Blurry](some_results/ref/blur_rendering.gif) | ![NAFNet->SPSR (Strategy-1)](some_results/ref/nafnet_spsr_rendering.gif) |
