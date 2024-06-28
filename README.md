@@ -25,7 +25,7 @@ chmod +x run_strategy_3.sh
 ```
 
 ### Rendering and Metrics
-I use [Nerfstudio](https://docs.nerf.studio/quickstart/installation.html) and [Hloc](https://github.com/cvg/Hierarchical-Localization) for rendering the gaussian splats, and use original GS repo code for evaluating metrics. For rendering and evaluation, run:
+I use [Nerfstudio (Splatfacto)](https://docs.nerf.studio/quickstart/installation.html) and [Hloc](https://github.com/cvg/Hierarchical-Localization) for rendering the gaussian splats, and use original GS repo code for evaluating metrics. For rendering and evaluation, run:
 
 ```bash
 cd rendering_and_metrics
