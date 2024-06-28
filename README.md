@@ -25,7 +25,7 @@ mv results esrgan_output
 ### Setting up NAFNet
 ```bash
 cd NAFNet
-gdown https://drive.google.com/file/d/14D4V4raNYIOhETfcuuLI3bGLB-OYIv6X/view?usp=sharing
+gdown https://drive.google.com/file/d/14D4V4raNYIOhETfcuuLI3bGLB-OYIv6X/view?usp=sharing --fuzzy
 mv NAFNet-REDS-width64.pth experiments/pretrained_models
 pip install -r requirements.txt
 python setup.py develop --no_cuda_ext
