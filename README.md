@@ -68,7 +68,7 @@ The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.tx
 | Ground Truth | Blurry | NAFNet->SPSR (Strategy-1) |
 |:---:|:---:|:---:|
 | ![Ground Truth](some_results/ref/groundtruth_rendering.gif) | ![Blurry](some_results/ref/blur_rendering.gif) | ![NAFNet->SPSR](some_results/ref/nafnet_spsr_rendering.gif) |
-| SSIM :    0.8418334<br>PSNR :   34.5210227<br>LPIPS:    0.0444530 | SSIM :    0.7514025<br>PSNR :   32.1782157<br>LPIPS:    0.1971197 | SSIM :    0.7128514<br>PSNR :   32.1120904<br>LPIPS:    0.1653063 |
+| SSIM :    0.8418334<br>PSNR :   34.5210227<br>LPIPS:    0.0444530 | SSIM :    0.7365065<br>PSNR :   31.6519640<br>LPIPS:    0.2315612 | SSIM :    0.7202776<br>PSNR :   31.8796042<br>LPIPS:    0.1643362 |
 
 
 
