@@ -162,6 +162,15 @@ def get_metrics(renders_dir, gt_dir):
     for fname in os.listdir(renders_dir):
         render_path=os.path.join(renders_dir,fname)
         gt_path = os.path.join(gt_dir,fname)
+        #--------------Assuming if groudtruth and renders are still in different order, then uncomment following-----------
+        # psnr_record=[]
+        # for gt_pt in gt_paths_abl:
+        #     gt_path=os.path.join(gt_dir,gt_pt)
+        #     psnr_record.append(calculate_psnr(render_path, gt_path))
+
+        # idx=psnr_record.index(max(psnr_record))
+        # gt_path=os.path.join(gt_dir,gt_paths_abl[idx])
+        #-------------------------------------------------------------------------------------------------------------------
         ssim_r.append(calculate_ssim(render_path, gt_path))
         psnr_r.append(calculate_psnr(render_path, gt_path))
         lpips_r.append(calculate_lpips(render_path, gt_path))
