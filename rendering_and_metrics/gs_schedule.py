@@ -7,11 +7,14 @@ import os
 from PIL import Image
 import torch
 import torchvision.transforms.functional as tf
+from loss_utils import ssim
 import json
 from tqdm import tqdm
+from image_utils import psnr
 from skimage.metrics import structural_similarity as ssim
 import lpips
 from torchvision import transforms
+
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--dir',type=str,required=True,help='directory of images to render upon')
@@ -23,10 +26,19 @@ if os.path.exists(gs_dir):
     os.system(f'rm -rf {gs_dir}')
 
 os.system(f'mkdir {gs_dir}')
-if os.path.exists('dataset'):
-    os.system('rm -rf dataset')
 
-os.system(f'ns-process-data images --data {dirr} --output-dir dataset --num-downscales 1 --sfm-tool hloc')
+do_colmap=True
+while do_colmap:
+    if os.path.exists('dataset'):
+        os.system('rm -rf dataset')
+
+    os.system(f'ns-process-data images --data {dirr} --output-dir dataset --num-downscales 1 --sfm-tool hloc')
+    if os.path.exists('dataset/images'):
+        len1=len(os.listdir('dataset/images'))
+        len2=len(os.listdir(dirr))
+        if len1==len2:
+            do_colmap=False
+
 
 os.system(f'mkdir {gs_dir}/groundtruth_imgs')
 
@@ -59,13 +71,14 @@ new_pseudo_names=[]
 #     new_name=name.split('_')[0]+'_'+str(new_indx)+'.'+name.split('_')[-1].split('.')[-1]
 #     new_pseudo_names.append(new_name)
 
-for i in range(len(pseudo_gt_img_names):
+for i in range(len(pseudo_gt_img_names)):
     name=pseudo_gt_img_names[i]
     new_idx=mapping_img_names[i]
-    new_name=name.split('_')[0]+'_'+str(new_indx)+'.'+name.split('_')[-1].split('.')[-1]
+    new_name=name.split('_')[0]+'_'+str(new_idx)+'.'+name.split('_')[-1].split('.')[-1]
     new_pseudo_names.append(new_name)
     
 pseudo_gt_img_paths=[os.path.join(args.gt_dir,gt_name) for gt_name in new_pseudo_names]
+
 
 
 os.system("ns-train splatfacto --data dataset  --viewer.quit-on-train-completion True --pipeline.model.cull_alpha_thresh 0.005 --pipeline.model.continue_cull_post_densification False nerfstudio-data --train-split-fraction 1.1 --eval_mode 'all'")
@@ -93,6 +106,8 @@ while(cap.isOpened()):
         cv2.imwrite(f'{gs_dir}/groundtruth_imgs/img_{count}.png',gt_im)
     else:
         tmp_pth=pseudo_gt_img_paths[count]
+        print("++++++++++++")
+        print(tmp_pth)
         gt_im=cv2.imread(tmp_pth)
         cv2.imwrite(f'{gs_dir}/groundtruth_imgs/img_{count}.png',gt_im)
     
@@ -111,11 +126,14 @@ while(cap.isOpened()):
   else:
     break
 
+# When everything done, release the video capture object
 cap.release()
 
+# Closes all the frames
 cv2.destroyAllWindows()
 
 os.system('rm -rf buffer.mp4')
+
 
 def calculate_psnr(img_path, ground_truth_path):
     img = cv2.imread(img_path)
@@ -158,18 +176,20 @@ def get_metrics(renders_dir, gt_dir):
     ssim_r=[]
     psnr_r=[]
     lpips_r=[]
+    rend_imgs=os.listdir(renders_dir)
+    gt_imgs=os.listdir(gt_dir)
 
-    for fname in os.listdir(renders_dir):
+    for fname in rend_imgs:
         render_path=os.path.join(renders_dir,fname)
         gt_path = os.path.join(gt_dir,fname)
         #--------------Assuming if groudtruth and renders are still in different order, then uncomment following-----------
-        # psnr_record=[]
-        # for gt_pt in gt_paths_abl:
-        #     gt_path=os.path.join(gt_dir,gt_pt)
-        #     psnr_record.append(calculate_psnr(render_path, gt_path))
+        psnr_record=[]
+        for gt_i in gt_imgs:
+            gt_pt=os.path.join(gt_dir,gt_i)
+            psnr_record.append(calculate_psnr(render_path, gt_pt))
 
-        # idx=psnr_record.index(max(psnr_record))
-        # gt_path=os.path.join(gt_dir,gt_paths_abl[idx])
+        idx=psnr_record.index(max(psnr_record))
+        gt_path=os.path.join(gt_dir,gt_imgs[idx])
         #-------------------------------------------------------------------------------------------------------------------
         ssim_r.append(calculate_ssim(render_path, gt_path))
         psnr_r.append(calculate_psnr(render_path, gt_path))

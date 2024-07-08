@@ -1,75 +1,62 @@
-import os
 import cv2
-import argparse
-import torch
+import os
 import numpy as np
-import torchvision.transforms as transforms
-from skimage.data import astronaut
+import argparse
+from blurgenerator import motion_blur,lens_blur, gaussian_blur
 
-parser=argparse.ArgumentParser()
-parser.add_argument('--dir',required=True,type=str,help='directory of images')
-parser.add_argument('--hor_blur',type=int,default=15,help='Y-axis blur parameters (horizonatal)')
-parser.add_argument('--vert_blur',type=int,default=5,help='X-axis blur parameters (vertical)')
-args=parser.parse_args()
+def calculate_psnr(img1, img2, max_value=255):
+    mse = np.mean((np.array(img1, dtype=np.float32) - np.array(img2, dtype=np.float32)) ** 2)
+    if mse == 0:
+        return 100
+    return 20 * np.log10(max_value / (np.sqrt(mse)+1e-8))
 
-dirr=args.dir
-img_names=sorted(os.listdir(dirr),key=lambda x: int(x.split('_')[-1].split('.')[0]) if '_' in x else int(x.split('.')[0]))
-img_dirs=[os.path.join(dirr,img_name) for img_name in img_names]
 
-if os.path.exists(dirr+'_blurred'):
-    os.system(f'rm -rf {dirr}_blurred')
-os.system(f'mkdir {dirr}_blurred')
+def main(dirr,size,angle,radius,components,gamma):
+    img_names=os.listdir(dirr)
+    img_pths=[os.path.join(dirr,img_name) for img_name in img_names]
+    new_dir1=dirr+'_blurred_motion'
+    new_dir2=dirr+'_blurred_lens'
+    new_dir3=dirr+'_blurred_gaussian'
+    if os.path.exists(new_dir1):
+        os.system(f'rm -rf {new_dir1}')
+    os.makedirs(new_dir1)
+    if os.path.exists(new_dir2):
+        os.system(f'rm -rf {new_dir2}')
+    os.makedirs(new_dir2)
+    if os.path.exists(new_dir3):
+        os.system(f'rm -rf {new_dir3}')
+    os.makedirs(new_dir3)
+    
+    for i in range(len(img_pths)):
+        img_name=img_names[i]
+        pth=img_pths[i]
+        image=cv2.imread(pth)
+        motion_blurred = motion_blur(image, size=size, angle=angle)
+        psnr=calculate_psnr(image,motion_blurred)
+        print(f'Image:{img_name}')
+        print(f'\t>>Motion Blurred Image has PSNR of {psnr} dB')
+        cv2.imwrite(f'{new_dir1}/{img_name}',motion_blurred)
+        lens_blurred=lens_blur(image,radius=radius,components=components,exposure_gamma=gamma)
+        psnr=calculate_psnr(image,lens_blurred)
+        cv2.imwrite(f'{new_dir2}/{img_name}',lens_blurred)
+        print(f'\t>>Lens Blurred Image has PSNR of {psnr} dB')
+        gaussian_blurred=gaussian_blur(image,size)
+        psnr=calculate_psnr(image,gaussian_blurred)
+        print(f'\t>>Gaussian Blurred Image has PSNR of {psnr} dB')
+        cv2.imwrite(f'{new_dir3}/{img_name}',gaussian_blurred)
 
-class MotionBlur(object):
-    ''' Induces Motion Blurr on a given image (image must be padded to even dimensions)
-        Inputs:
-            a - horizontal motion factor
-            b - vertical motion factor
-        '''
-    def __init__(self, a, b):
-        self.a = abs(a)
-        self.b = abs(b)
 
-    def __call__(self, image):
-        if (self.a == 0) and (self.b == 0):
-            return image
+if __name__=='__main__':
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--dir',type=str,required=True,help='directory of images')
+    parser.add_argument('--size',type=int,default=10,help='size of blur kernel')
+    parser.add_argument('--angle',type=int,default=30,help='direction of blur')
+    parser.add_argument('--radius',type=int,default=3,help='radius of lens blur')
+    parser.add_argument('--components',type=int,default=2,help='components of lens blur')
+    parser.add_argument('--gamma',type=int,default=1,help='exposure gamma for lens blur')
+    args=parser.parse_args()
+    main(args.dir,args.size,args.angle,args.radius,args.components,args.gamma)
 
-        btch, c, n, m = image.shape
 
-        # get values for a and b
-        self.a = torch.distributions.Uniform(-self.a, self.a).sample((btch, 1))
-        self.b = torch.distributions.Uniform(-self.b, self.b).sample((btch, 1))
 
-        # compute FFT of image
-        # image = image.double()
-        F = torch.fft.fft2(image)
 
-        # compute motion blurr function H in Frequency Domain
-        u = torch.fft.fftfreq(n)[None, :].unsqueeze(0).repeat(btch, 1, 1)
-        v = torch.fft.fftfreq(m)[:, None].unsqueeze(0).repeat(btch, 1, 1)
-
-        omega = torch.pi*(u*self.a + v*self.b)
-        H = (1/omega) * torch.sin(omega) * torch.exp(-(1.0j * omega))
-        H[omega == 0] = 1
-
-        H = H.reshape((btch, n, m))
-
-        # perform motion blurring in Frequency Domain for each channel
-        G = torch.zeros_like(F)
-        for i in range(c):
-            G[:, i, :, :] = F[:, i, :, :]*H
-
-        # get blurred image
-        return torch.abs(torch.fft.ifft2(G))
-
-for i,img_dir in enumerate(img_dirs):
-    img=cv2.imread(img_dir)
-    image_tensor = transforms.ToTensor()(img)
-    image_tensor=image_tensor.float()/255.0
-    blurred_image_tensor = MotionBlur(args.vert_blur,args.hor_blur)(image_tensor.unsqueeze(0))
-    blurred_image_tensor -= blurred_image_tensor.min()
-    blurred_image_tensor /= blurred_image_tensor.max()
-    blurred_img=blurred_image_tensor.permute(0,2,3,1).squeeze(0).numpy()
-    blurred_img *=255
-    blurred_img=blurred_img.astype(np.uint8)
-    cv2.imwrite(f'{dirr}_blurred/img_{i}.png',blurred_img)
