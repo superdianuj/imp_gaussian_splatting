@@ -73,6 +73,17 @@ The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.tx
 
 ### Action of Debluring Models on Rendering
 
+<figure>
+    <img src="some_results/ref_2/ground_truth_gs.gif" alt="Ground Truth" style="width: 100%;">
+    <figcaption><b>Ground Truth Gaussian Splatting</b><br>SSIM: 0.8537942<br>PSNR: 34.8942894<br>LPIPS: 0.0486813</figcaption>
+</figure>
+
+## Metrics
+
+- **Accuracy:** 0.8587
+- **MCC:** 0.8351
+- **IOU:** 0.7523
+
 |                 | Motion-Blurred                                      | Lens-Blurred                                        | Gaussian-Blurred                                    |
 |-----------------|-----------------------------------------------------|-----------------------------------------------------|-----------------------------------------------------|
 | **NAFNet**      | ![Motion-Blurred](some_results/ref_2/nafnet_motion.gif)<br>**SSIM**: 0.7144054<br>**PSNR**: 31.8041596<br>**LPIPS**: 0.2725016 | ![Lens-Blurred](some_results/ref_2/nafnet_lens.gif)<br>**SSIM**: 0.8256776<br>**PSNR**: 33.8201837<br>**LPIPS**: 0.0865366 | ![Gaussian-Blurred](some_results/ref_2/nafnet_gaussian.gif)<br>**SSIM**: 0.7774865<br>**PSNR**: 32.7108423<br>**LPIPS**: 0.1944816 |
