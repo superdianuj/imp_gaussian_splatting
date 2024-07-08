@@ -78,11 +78,7 @@ The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.tx
     <figcaption><b>Ground Truth Gaussian Splatting</b><br>SSIM: 0.8537942<br>PSNR: 34.8942894<br>LPIPS: 0.0486813</figcaption>
 </figure>
 
-## Metrics
 
-- **Accuracy:** 0.8587
-- **MCC:** 0.8351
-- **IOU:** 0.7523
 
 |                 | Motion-Blurred                                      | Lens-Blurred                                        | Gaussian-Blurred                                    |
 |-----------------|-----------------------------------------------------|-----------------------------------------------------|-----------------------------------------------------|
