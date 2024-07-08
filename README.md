@@ -71,6 +71,15 @@ The results are stored in "args.dir"+"_gs" folder as renderings and metrics (.tx
 | SSIM :    0.8418334<br>PSNR :   34.5210227<br>LPIPS:    0.0444530 | SSIM :    0.7365065<br>PSNR :   31.6519640<br>LPIPS:    0.2315612 | SSIM :    0.7202776<br>PSNR :   31.8796042<br>LPIPS:    0.1643362 |
 
 
+### Action of Debluring Models on Rendering
+
+|                 | Motion-Blurred                                      | Lens-Blurred                                        | Gaussian-Blurred                                    |
+|-----------------|-----------------------------------------------------|-----------------------------------------------------|-----------------------------------------------------|
+| **NAFNet**      | ![Motion-Blurred](some_results/ref2/nafnet_motion.gif)<br>**SSIM**: 0.7144054<br>**PSNR**: 31.8041596<br>**LPIPS**: 0.2725016 | ![Lens-Blurred](some_results/ref2/nafnet_lens.gif)<br>**SSIM**: 0.8256776<br>**PSNR**: 33.8201837<br>**LPIPS**: 0.0865366 | ![Gaussian-Blurred](some_results/ref2/nafnet_gaussian.gif)<br>**SSIM**: 0.7774865<br>**PSNR**: 32.7108423<br>**LPIPS**: 0.1944816 |
+| **Real-ESRGAN** | ![Motion-Blurred](some_results/ref2/realesrgan_motion.gif)<br>**SSIM**: 0.7185786<br>**PSNR**: 31.4306795<br>**LPIPS**: 0.3563879 | ![Lens-Blurred](some_results/ref2/realesrgan_lens.gif)<br>**SSIM**: 0.7592866<br>**PSNR**: 32.5180515<br>**LPIPS**: 0.1568963 | ![Gaussian-Blurred](some_results/ref2/realesrgan_gaussian.gif)<br>**SSIM**: 0.6342124<br>**PSNR**: 28.8450565<br>**LPIPS**: 0.5116010 |
+| **Bad-Gaussians** | ![Motion-Blurred](some_results/ref2/badgaussian_motion.gif)<br>**SSIM**: 0.7338864<br>**PSNR**: 31.7400618<br>**LPIPS**: 0.3800035 | ![Lens-Blurred](some_results/ref2/badgaussian_lens.gif)<br>**SSIM**: 0.7877066<br>**PSNR**: 33.4288919<br>**LPIPS**: 0.1447114 | ![Gaussian-Blurred](some_results/ref2/badgaussian_gaussian.gif)<br>**SSIM**: 0.7671796<br>**PSNR**: 32.7544921<br>**LPIPS**: 0.2529144 |
+
+
 
 ### Comparison with Other Deblurring Rendering Techniques
 
