@@ -1,6 +1,9 @@
 #  Improved 3D Gaussian Splatting
 
-
+## Dictionary of God that is ideas (at the moment lame):
+* ** Strategy-1 : ** Perform NAFNet deblurring, and then SPSR superresolution of images before COLMAP routine + GS routine
+* ** Strategy-2 : ** Peform Real-ESRGAN deblurring and then SPSR superresolution of images before COLMAP routine + GS routine
+* ** Strategy-3 : ** Poisson blending of Strategy-1 and Strategy-2 outputs (before COLMAP routine + GS routine)
 ## Installation
 
 **Platform**: Ubuntu 22+
